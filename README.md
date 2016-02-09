@@ -12,9 +12,9 @@ Exposed port: 5984
 
 
 ## Environment variables
-- DATADIR (default value : /data) : db data dir
-- SUPERUSER (default value : neogeo) : db superuser login
-- SUPERUSER (default value : none) : db superuser password. If this variable is not defined in your docker run command or in your docker-compose file, it will be generated randomly. To get its value, use docker logs or docker-compose logs.
+- DATADIR (default value: /usr/local/var/lib/couchdb): db data dir
+- SUPERUSER (default value: neogeo): db superuser login
+- SUPERUSER (default value: none): db superuser password. If this variable is not defined in your docker run command or in your docker-compose file, it will be generated randomly. To get its value, use docker logs or docker-compose logs.
 
 
 ## Credits

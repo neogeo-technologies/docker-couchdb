@@ -4,22 +4,16 @@
 set -m
 
 # Configure couchdb
-sed -i -r 's/;port = 5984/port = 5984/' /usr/local/etc/couchdb/local.ini
-sed -i -r 's/;bind_address = 127.0.0.1/bind_address = 0.0.0.0/' /usr/local/etc/couchdb/local.ini
-
 if [ ! -f /usr/local/var/lib/couchdb/.couchdb_admin_created ]; then
-	PASS=${SUPERPASS:-$(pwgen -s -1 16)}
-	echo $PASS
-	sed -i -r 's/;admin = mysecretpassword/'"$SUPERUSER"' = '"${PASS}"'/' /usr/local/etc/couchdb/local.ini
-	tail -n 1 /usr/local/etc/couchdb/local.ini
-fi
-#[couchdb]
-#sed -i -r 's/;database_dir = 127.0.0.1/bind_address = 0.0.0.0/' /usr/local/etc/couchdb/local.ini
-#sed -i -r 's/;view_index_dir = 127.0.0.1/bind_address = 0.0.0.0/' /usr/local/etc/couchdb/local.ini
 
-# adduser --no-create-home couchdb
-# chown -R couchdb:couchdb /usr/local/var/lib/couchdb /usr/local/var/log/couchdb /usr/local/var/run/couchdb
-# ln -sf /usr/local/etc/rc.d/couchdb /etc/init.d/couchdb
+	DATAPATH=${DATADIR:-/usr/local/var/lib/couchdb}
+	PASS=${SUPERPASS:-$(pwgen -s -1 16)}
+	crudini --set /usr/local/etc/couchdb/local.ini httpd port 5984
+	crudini --set /usr/local/etc/couchdb/local.ini httpd bind_address 0.0.0.0
+	crudini --set /usr/local/etc/couchdb/local.ini couchdb database_dir $DATAPATH
+	crudini --set /usr/local/etc/couchdb/local.ini couchdb view_index_dir $DATAPATH
+	crudini --set /usr/local/etc/couchdb/local.ini admins $SUPERUSER $PASS
+fi
 
 # Run CouchDB in background
 /usr/local/bin/couchdb &
@@ -35,7 +29,7 @@ if [ ! -f /usr/local/var/lib/couchdb/.couchdb_admin_created ]; then
 
 	echo "SUPERUSER: \"$SUPERUSER\""
 	echo "SUPERPASS: \"$PASS\""
-# 	echo "DATADIR: \"$DATADIR\""
+ 	echo "DATADIR: \"$DATAPATH\""
 
 	RET=7
 	while [[ RET -ne 0 ]]; do
@@ -45,8 +39,8 @@ if [ ! -f /usr/local/var/lib/couchdb/.couchdb_admin_created ]; then
 	    RET=$?
 	done
 
-	curl -s http://$SUPERUSER:$PASS@127.0.0.1:5984/_config/httpd/bind_address
-	curl -s http://$SUPERUSER:$PASS@127.0.0.1:5984/_config/httpd/port
+	# curl -s http://$SUPERUSER:$PASS@127.0.0.1:5984/_config/httpd/bind_address
+	# curl -s http://$SUPERUSER:$PASS@127.0.0.1:5984/_config/httpd/port
 
 	touch /usr/local/var/lib/couchdb/.couchdb_admin_created
 

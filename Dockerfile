@@ -7,6 +7,7 @@ RUN yum -y install epel-release; yum clean all
 
 
 RUN yum -y install \
+	crudini \
 	pwgen \
 	wget \
 	; yum clean all
@@ -14,6 +15,7 @@ RUN yum -y install \
 # Dev tools
 RUN yum -y groupinstall "Development Tools"
 
+# CouchDB dependencies
 RUN yum -y install \
 	libicu-devel \
 	curl-devel \
@@ -27,10 +29,6 @@ RUN yum -y install \
 	unixODBC-devel \
 	openssl-devel \
 	; yum clean all
-
-# Install gosu (replacer for sudo) - https://github.com/tianon/gosu
-# RUN curl -L https://github.com/tianon/gosu/releases/download/1.7/gosu-amd64 -o /usr/local/sbin/gosu; \
-#    chmod 0755 /usr/local/sbin/gosu
 
 # Install Erlang with SSL support from source
 RUN cd /tmp && \
@@ -60,7 +58,7 @@ RUN cd /tmp && \
     make install
 
    
-ENV DATADIR /data
+ENV DATADIR /usr/local/var/lib/couchdb
 ENV SUPERUSER neogeo
 # ENV SUPERPASS neogeo
 
