@@ -1,4 +1,4 @@
-# docker-pg95
+# docker-couchdb
 Simple CouchDB 1.6.1 server image (based on Centos 7)
 
 CouchDB is installed from source in this image
