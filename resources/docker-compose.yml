@@ -15,4 +15,4 @@ couchdb_server:
     volumes_from:
         - couchdb_data
     ports:
-        - "5432:5984"
+        - "5984:5984"
