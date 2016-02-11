@@ -5,59 +5,62 @@ RUN yum -y update; yum clean all
 RUN yum -y -q reinstall glibc-common; yum clean all
 RUN yum -y install epel-release; yum clean all
 
-
-RUN yum -y install \
-	crudini \
-	pwgen \
-	wget \
-	; yum clean all
-
-# Dev tools
-RUN yum -y groupinstall "Development Tools"
-
 # CouchDB dependencies
 RUN yum -y install \
-	libicu-devel \
+	autoconf \
+	crudini \
 	curl-devel \
-	ncurses-devel \
+	fop \
+	gcc \
+	gcc-c++ \
+	glibc-devel \
+	java-1.8.0-openjdk-devel \
+	libicu-devel \
 	libtool \
 	libxslt \
-	fop \
-	java-1.6.0-openjdk \
-	java-1.6.0-openjdk-devel \
+	make \
+	ncurses-devel \
+	openssl-devel \
+	pwgen \
 	unixODBC \
 	unixODBC-devel \
-	openssl-devel \
+	wget \
+	zip \
 	; yum clean all
 
 # Install Erlang with SSL support from source
 RUN cd /tmp && \
-	wget http://www.erlang.org/download/otp_src_R16B02.tar.gz && \
+	wget -nv http://www.erlang.org/download/otp_src_R16B02.tar.gz && \
     tar -xzvf otp_src_R16B02.tar.gz && \
     cd otp_src_R16B02 && \
     CFLAGS="-DOPENSSL_NO_EC=1" ./configure && \
     make && \
-    make install
+    make install && \
+	rm /tmp/otp_src_R16B02.tar.gz && \
+	rm -rf /tmp/otp_src_R16B02
 
 # Install SpiderMonkey JS from source
 RUN cd /tmp && \
-	wget http://ftp.mozilla.org/pub/mozilla.org/js/js185-1.0.0.tar.gz && \
+	wget -nv http://ftp.mozilla.org/pub/mozilla.org/js/js185-1.0.0.tar.gz && \
     tar -xzvf js185-1.0.0.tar.gz && \
     cd js-1.8.5/js/src/ && \
     ./configure && \
     make && \
-    make install
+    make install && \
+	rm /tmp/js185-1.0.0.tar.gz && \
+	rm -rf /tmp/js-1.8.5
 
 # Install CouchDB from source
 RUN cd /tmp && \
-	wget http://mirror.tcpdiag.net/apache/couchdb/source/1.6.1/apache-couchdb-1.6.1.tar.gz && \
+	wget -nv http://mirror.tcpdiag.net/apache/couchdb/source/1.6.1/apache-couchdb-1.6.1.tar.gz && \
     tar -xzvf apache-couchdb-1.6.1.tar.gz && \
     cd apache-couchdb-1.6.1 && \
     ./configure && \
     make && \
-    make install
+    make install && \
+	rm /tmp/apache-couchdb-1.6.1.tar.gz && \
+	rm -rf /tmp/apache-couchdb-1.6.1
 
-   
 ENV DATADIR /usr/local/var/lib/couchdb
 ENV SUPERUSER neogeo
 # ENV SUPERPASS neogeo
