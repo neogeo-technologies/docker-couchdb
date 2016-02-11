@@ -3,6 +3,7 @@ couchdb_data:
         centos
     volumes:
         - /data
+        - /usr/local/var/log/couchdb
     command:
         echo "Data container for CouchDB Data volume /data"
 couchdb_server:

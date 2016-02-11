@@ -71,5 +71,5 @@ RUN chmod +x /scripts/*.sh
 
 CMD ["/scripts/run.sh"]
 
-VOLUME ["${DATADIR}", "/usr/local/var/log/couchdb", "/usr/local/etc/couchdb"]
+VOLUME ["${DATADIR}", "/usr/local/var/log/couchdb"]
 EXPOSE 5984

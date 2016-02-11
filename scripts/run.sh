@@ -13,6 +13,7 @@ if [ ! -f /usr/local/var/lib/couchdb/.couchdb_admin_created ]; then
 	crudini --set /usr/local/etc/couchdb/local.ini couchdb database_dir $DATAPATH
 	crudini --set /usr/local/etc/couchdb/local.ini couchdb view_index_dir $DATAPATH
 	crudini --set /usr/local/etc/couchdb/local.ini admins $SUPERUSER $PASS
+	crudini --set /usr/local/etc/couchdb/local.ini log level info
 fi
 
 # Run CouchDB in background
