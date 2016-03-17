@@ -8,24 +8,27 @@ RUN yum -y install epel-release; yum clean all
 # CouchDB dependencies
 RUN yum -y install \
 	autoconf \
+	autoconf-archive \
+	automake \
 	crudini \
 	curl-devel \
-	fop \
 	gcc \
 	gcc-c++ \
 	glibc-devel \
-	java-1.8.0-openjdk-devel \
+	erlang-asn1 \
+	erlang-erts \
+	erlang-eunit \
+	erlang-os_mon \
+	erlang-xmerl \
+	help2man \
+	js-devel \
 	libicu-devel \
 	libtool \
-	libxslt \
 	make \
-	ncurses-devel \
 	openssl-devel \
+	perl-Test-Harness \
 	pwgen \
-	unixODBC \
-	unixODBC-devel \
-	wget \
-	zip \
+    wget \
 	; yum clean all
 
 # Install Erlang with SSL support from source
@@ -39,17 +42,6 @@ RUN cd /tmp && \
 	rm /tmp/otp_src_R16B02.tar.gz && \
 	rm -rf /tmp/otp_src_R16B02
 
-# Install SpiderMonkey JS from source
-RUN cd /tmp && \
-	wget -nv http://ftp.mozilla.org/pub/mozilla.org/js/js185-1.0.0.tar.gz && \
-    tar -xzvf js185-1.0.0.tar.gz && \
-    cd js-1.8.5/js/src/ && \
-    ./configure && \
-    make && \
-    make install && \
-	rm /tmp/js185-1.0.0.tar.gz && \
-	rm -rf /tmp/js-1.8.5
-
 # Install CouchDB from source
 RUN cd /tmp && \
 	wget -nv http://mirror.tcpdiag.net/apache/couchdb/source/1.6.1/apache-couchdb-1.6.1.tar.gz && \
@@ -60,6 +52,12 @@ RUN cd /tmp && \
     make install && \
 	rm /tmp/apache-couchdb-1.6.1.tar.gz && \
 	rm -rf /tmp/apache-couchdb-1.6.1
+
+
+RUN yum -y install \
+	crudini \
+	; yum clean all
+
 
 ENV DATADIR /usr/local/var/lib/couchdb
 ENV SUPERUSER neogeo
